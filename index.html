@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task 4 - Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>My Portfolio</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I am a passionate web developer...</p>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <ul id="project-list">
+      <li data-rating="4" data-price="500">Weather App - Rating: 4 - ₹500</li>
+      <li data-rating="5" data-price="300">To-Do List - Rating: 5 - ₹300</li>
+      <li data-rating="3" data-price="700">Portfolio - Rating: 3 - ₹700</li>
+    </ul>
+    <button onclick="sortByPrice()">Sort by Price</button>
+    <button onclick="sortByRating()">Sort by Rating</button>
+  </section>
+
+  <section id="todo">
+    <h2>To-Do List</h2>
+    <input type="text" id="todo-input" placeholder="Add a task">
+    <button onclick="addTask()">Add</button>
+    <ul id="todo-list"></ul>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Email: example@example.com</p>
+  </section>
+
+  <script>
+    const input = document.getElementById("todo-input");
+    const list = document.getElementById("todo-list");
+
+    function addTask() {
+      const task = input.value.trim();
+      if (task) {
+        const li = document.createElement("li");
+        li.textContent = task;
+        list.appendChild(li);
+        saveTasks();
+        input.value = "";
+      }
+    }
+
+    function saveTasks() {
+      localStorage.setItem("tasks", list.innerHTML);
+    }
+
+    function loadTasks() {
+      list.innerHTML = localStorage.getItem("tasks") || "";
+    }
+
+    function sortByPrice() {
+      sortProjects("price");
+    }
+
+    function sortByRating() {
+      sortProjects("rating");
+    }
+
+    function sortProjects(criteria) {
+      const items = Array.from(document.querySelectorAll("#project-list li"));
+      items.sort((a, b) => {
+        return parseInt(a.dataset[criteria]) - parseInt(b.dataset[criteria]);
+      });
+      const list = document.getElementById("project-list");
+      list.innerHTML = "";
+      items.forEach(item => list.appendChild(item));
+    }
+
+    loadTasks();
+  </script>
+</body>
+</html>
